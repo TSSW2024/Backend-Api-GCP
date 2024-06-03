@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: sprint-3-back
-        image: {PROJECT_ID}/{REPOSITORY}/{IMAGE}:{GITHUB_SHA}
+        image: PROJECT_ID/REPOSITORY/IMAGE:GITHUB_SHA
         ports:
         - containerPort: 8989
         resources:
