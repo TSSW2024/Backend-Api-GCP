@@ -7,7 +7,7 @@ jobs:
     name: Build and Push to GCP
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: Api-Binance
+      IMAGE_NAME: api-binance
       PROJECT_ID: tss-1s2024
     steps:
     - name: Checkout
