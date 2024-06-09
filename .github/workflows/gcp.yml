@@ -44,10 +44,13 @@ jobs:
         docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:$GIT_TAG
 
     
-    - uses: google-github-actions/setup-gcloud@1bee7de035d65ec5da40a31f8589e240eba8fde5
+    - name: Install Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-       project_id: ${{ secrets.PROJECT_ID }}
-
+          version: 'latest'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+      
     - name: Get GKE Credentials
       run: |-
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
