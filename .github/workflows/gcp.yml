@@ -51,6 +51,10 @@ jobs:
           project_id: ${{ secrets.PROJECT_ID }}
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
+    - name: Install gke-gcloud-auth-plugin
+      run: gcloud components install gke-gcloud-auth-plugin
+        
+
     - name: Debug kubectl configurations
       run: kubectl config view
       
