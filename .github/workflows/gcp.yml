@@ -43,30 +43,33 @@ jobs:
         docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:latest
         docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:$GIT_TAG
 
-    
     - name: Install Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-          version: 'latest'
-          project_id: ${{ secrets.PROJECT_ID }}
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+        version: 'latest'
+        project_id: ${{ secrets.PROJECT_ID }}
+        service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
     - name: Install gke-gcloud-auth-plugin
       run: gcloud components install gke-gcloud-auth-plugin
-      
+
     - name: Get GKE Credentials
-      run: |-
+      run: |
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
+
+    - name: Replace placeholders in deploy.yaml
+      run: |
+        sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.REPO_NAME }}/${{ secrets.IMAGE_NAME }}:latest|g" ./deploy/k8s/deploy.yaml
 
     - name: Apply Kubernetes Deploy YAML
       run: kubectl apply -f ./deploy/k8s/deploy.yaml
-  
+
     - name: Apply Kubernetes Ingress YAML
       run: kubectl apply -f ./deploy/k8s/ingress.yaml
-  
+
     - name: Apply Kubernetes Services YAML
       run: kubectl apply -f ./deploy/k8s/services.yaml
 
     - name: Get Services Information
-      run: |-
-          kubectl get services -o wide -n ${{ secrets.NAMESPACE }}
+      run: |
+        kubectl get services -o wide -n ${{ secrets.NAMESPACE }}
