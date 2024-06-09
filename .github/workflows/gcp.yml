@@ -8,13 +8,13 @@ jobs:
     name: Build and Push to GCP
     runs-on: ubuntu-latest
     env:
-      IMAGE_NAME: api-binance
+      IMAGE_NAME: ${{ IMAGE_NAME}}
       PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
       GKE_CLUSTER: ${{ secrets.GKE_CLUSTER_NAME }}
       GKE_ZONE: ${{ secrets.GKE_ZONE }}
       NAMESPACE: ${{ secrets.GKE_NAMESPACE }}
-      DEPLOYMENT_NAME: api-backend-gcp
-      
+      DEPLOYMENT_NAME: ${{ DEPLOYMENT_NAME}}
+
     steps:
     - name: Checkout
       uses: actions/checkout@v4
