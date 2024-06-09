@@ -48,12 +48,12 @@ jobs:
       run: |-
         docker tag $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
         docker tag $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
-        docker push ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker push $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
         docker push ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
 
     - name: Authenticate Service Account
       run: |-
-        echo ${{ secrets.SERVICE_ACCOUNT_KEY }} | base64 --decode > "${{ runner.temp }}/sa-key.json"
+        echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | base64 --decode > "${{ runner.temp }}/sa-key.json"
         gcloud auth activate-service-account --key-file="${{ runner.temp }}/sa-key.json"
 
     - name: Get GKE Credentials
