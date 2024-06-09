@@ -1,5 +1,4 @@
 name: Build and Push Go Image to Google Cloud Platform
-
 on:
   push:
     branches: [GCP]
@@ -10,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: api-binance
-      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-      GKE_CLUSTER: ${{ secrets.GKE_CLUSTER_NAME }}
-      GKE_ZONE: ${{ secrets.GKE_ZONE }}
-      NAMESPACE: ${{ secrets.GKE_NAMESPACE }}
-      DEPLOYMENT_NAME: api-backend-gcp
+      PROJECT_ID: tss-1s2024
+      GKE_CLUSTER: nombre-del-cluster
+      GKE_ZONE: region-del-cluster
+      NAMESPACE: nombre-del-namespace # Asegúrate de que el namespace exista en tu clúster
+      
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -22,10 +21,10 @@ jobs:
     - name: Authenticate with gcloud CLI
       uses: google-github-actions/auth@v1
       with:
-        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
     - name: Setup gcloud CLI
-      uses: google-github-actions/setup-gcloud@main
+      uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ env.PROJECT_ID }}
 
@@ -51,10 +50,11 @@ jobs:
         docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
         docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
 
-    - name: Get GKE Credentials
-      run: |-
-        gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} --zone ${{ env.GKE_ZONE }} --project ${{ env.PROJECT_ID }}
-
+    - uses: google-github-actions/get-gke-credentials@db150f2cc60d1716e61922b832eae71d2a45938f
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
     - name: Apply Kubernetes Manifests
       run: |-
         kubectl apply -f ./deploy/k8s/
