@@ -12,7 +12,7 @@ jobs:
       PROJECT_ID: tss-1s2024
       GKE_CLUSTER: nombre-del-cluster
       GKE_ZONE: region-del-cluster
-      NAMESPACE: nombre-del-namespace # Asegúrate de que el namespace exista en tu clúster
+      NAMESPACE: nombre-del-namespace 
       
     steps:
     - name: Checkout
