@@ -2,6 +2,7 @@ name: Build and Push Go Image to Google Cloud Platform
 on:
   push:
     branches: [GCP]
+
 jobs:
   build-push-gcr:
     name: Build and Push to GCP
@@ -9,6 +10,10 @@ jobs:
     env:
       IMAGE_NAME: api-binance
       PROJECT_ID: tss-1s2024
+      GKE_CLUSTER: nombre-del-cluster
+      GKE_ZONE: region-del-cluster
+      NAMESPACE: nombre-del-namespace # Asegúrate de que el namespace exista en tu clúster
+      
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -19,7 +24,7 @@ jobs:
         credentials_json: ${{ secrets.SERVICE_ACCOUNT_KEY }}
 
     - name: Setup gcloud CLI
-      uses: google-github-actions/setup-gcloud@main
+      uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ env.PROJECT_ID }}
 
@@ -45,11 +50,12 @@ jobs:
         docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
         docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
 
-    - name: Deploy to Kubernetes
-      run: |
-          kubectl apply -f ./deploy/k8s/
-          kubectl rollout status deployment/$DEPLOYMENT_NAME -n $NAMESPACE
-          kubectl get services -o wide
-      env:
-          DEPLOYMENT_NAME: ${{ env.DEPLOYMENT_NAME }}
-          NAMESPACE: ${{ env.NAMESPACE }}
+    - name: Get GKE Credentials
+      run: |-
+        gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $PROJECT_ID
+
+    - name: Apply Kubernetes Manifests
+      run: |-
+        kubectl apply -f ./deploy/k8s/
+        kubectl rollout status deployment/$DEPLOYMENT_NAME -n $NAMESPACE
+        kubectl get services -o wide -n $NAMESPACE
