@@ -13,6 +13,7 @@ jobs:
       GKE_CLUSTER: nombre-del-cluster
       GKE_ZONE: region-del-cluster
       NAMESPACE: nombre-del-namespace 
+      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
       
     steps:
     - name: Checkout
@@ -39,16 +40,16 @@ jobs:
     - name: Configure Docker Client
       run: |-
         gcloud auth configure-docker --quiet
-        gcloud auth configure-docker southamerica-east1-docker.pkg.dev --quiet
+        gcloud auth configure-docker ${{ env.REGISTRY_URL }} --quiet
 
     - name: Push Docker Image to Artifact Registry
       env:
         GIT_TAG: ${{ steps.increment-git-tag.outputs.git-tag }}
       run: |-
-        docker tag $IMAGE_NAME:latest southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
-        docker tag $IMAGE_NAME:latest southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
-        docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
-        docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
+        docker tag $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker tag $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
+        docker push ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker push ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
 
     - name: Get GKE Credentials
       run: |-
