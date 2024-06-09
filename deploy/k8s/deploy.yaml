@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api-binance
-        image: ${{ secrets.PROJECT_ID }}/${{ secrets.REPO_NAME }}/${{ secrets.IMAGE_NAME }}
+        image: ${REGISTRY_URL}/${IMAGE_NAME}:latest
         ports:
         - containerPort: 8989
         resources:
