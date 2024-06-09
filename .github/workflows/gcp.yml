@@ -59,7 +59,7 @@ jobs:
 
     - name: Replace placeholders in deploy.yaml
       run: |
-        sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.REPO_NAME | lower }}/${{ secrets.IMAGE_NAME }}:latest|g" ./deploy/k8s/deploy.yaml
+        sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.REPO_NAME }}/${{ secrets.IMAGE_NAME }}:latest|g" ./deploy/k8s/deploy.yaml
 
     - name: Apply Kubernetes Deploy YAML
       run: kubectl apply -f ./deploy/k8s/deploy.yaml
