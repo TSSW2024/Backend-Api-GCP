@@ -11,7 +11,7 @@ jobs:
       IMAGE_NAME: api-binance
       PROJECT_ID: tss-1s2024
       GKE_CLUSTER: nombre-del-cluster
-      GKE_ZONE: southamerica-east1
+      GKE_ZONE: region-del-cluster
       NAMESPACE: nombre-del-namespace 
       REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
       
@@ -48,13 +48,8 @@ jobs:
       run: |-
         docker tag $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
         docker tag $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
-        docker push $IMAGE_NAME:latest ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
+        docker push ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:latest
         docker push ${{ env.REGISTRY_URL }}/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
-
-    - name: Authenticate Service Account
-      run: |-
-        echo "${{ secrets.SERVICE_ACCOUNT_KEY }}" | base64 --decode > "${{ runner.temp }}/sa-key.json"
-        gcloud auth activate-service-account --key-file="${{ runner.temp }}/sa-key.json"
 
     - name: Get GKE Credentials
       run: |-
