@@ -1,7 +1,7 @@
 ## Punto 1
 
 - en la carpeta infobinance: GetCryptoPrices y GetSingleCryptoPrice obtenemos los precios de todas las monedas y de una moneda.
-- en la carpeta hhtprequest: HandleCryptoPrices Esta función maneja las solicitudes a la ruta /cryptoprices y los datos obtenidos de GetCryptoPrices los convierte en formato JSON y HandleCryptoPrices Esta función maneja las solicitudes a la ruta /cryptoprice (en singular) y los datos obtenidos de GetSingleCryptoPrice los convierte en formato JSON.
+- en la carpeta hhtprequest: HandleCryptoPrices Esta función maneja las solicitudes a la ruta /cryptoprices y los datos obtenidos de GetCryptoPrices los convierte en formato JSON y HandleCryptoPrices Esta función maneja las solicitudes a la ruta /cryptoprice (en singular) y los datos obtenidos de GetSingleCryptoPrice los convierte en formato JSON
 
 ## punto 2
 
