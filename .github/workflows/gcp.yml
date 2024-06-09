@@ -50,10 +50,11 @@ jobs:
         docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:latest
         docker push southamerica-east1-docker.pkg.dev/$PROJECT_ID/images/$IMAGE_NAME:$GIT_TAG
 
-    - name: Get GKE Credentials
-      run: |-
-        gcloud container clusters get-credentials $GKE_CLUSTER --zone $GKE_ZONE --project $PROJECT_ID
-
+    - uses: google-github-actions/get-gke-credentials@db150f2cc60d1716e61922b832eae71d2a45938f
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.SERVICE_ACCOUNT_KEY }}
     - name: Apply Kubernetes Manifests
       run: |-
         kubectl apply -f ./deploy/k8s/
