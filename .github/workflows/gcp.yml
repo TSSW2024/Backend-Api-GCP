@@ -53,10 +53,6 @@ jobs:
 
     - name: Install gke-gcloud-auth-plugin
       run: gcloud components install gke-gcloud-auth-plugin
-        
-
-    - name: Debug kubectl configurations
-      run: kubectl config view
       
     - name: Get GKE Credentials
       run: |-
