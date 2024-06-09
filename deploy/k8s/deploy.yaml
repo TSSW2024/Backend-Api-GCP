@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sprint-3-back
+  name: api-binance
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sprint-3-back
+      app: api-binance
   template:
     metadata:
       labels:
-        app: sprint-3-back
+        app: api-binance
     spec:
       containers:
-      - name: sprint-3-back
+      - name: api-binance
         image: PROJECT_ID/REPOSITORY/IMAGE:GITHUB_SHA
         ports:
         - containerPort: 8989
