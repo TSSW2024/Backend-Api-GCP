@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: api-binance
-      PROJECT_ID: tss-1s2024
-      GKE_CLUSTER: nombre-del-cluster
-      GKE_ZONE: region-del-cluster
-      NAMESPACE: nombre-del-namespace 
-      REGISTRY_URL: ${{ secrets.REGISTRY_URL }}
+      PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+      GKE_CLUSTER: ${{ secrets.GKE_CLUSTER_NAME }}
+      GKE_ZONE: ${{ secrets.GKE_ZONE }}
+      NAMESPACE: ${{ secrets.GKE_NAMESPACE }}
+      DEPLOYMENT_NAME: api-backend-gcp
       
     steps:
     - name: Checkout
