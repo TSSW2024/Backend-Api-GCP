@@ -3,6 +3,8 @@ on:
   push:
     branches: [GCP]
 
+env:
+     NAMESPACE: tssw2024
 jobs:
   build-push-gcr:
     name: Build and Push to GCP
@@ -69,7 +71,7 @@ jobs:
   
     - name: Check Deployment Status
       run: |-
-          kubectl rollout status deployment/${{ secrets.DEPLOYMENT_NAME }} -n ${{ secrets.NAMESPACE }}
+          kubectl rollout status deployment/${{ secrets.DEPLOYMENT_NAME }} -n ${{ env.NAMESPACE }}
   
     - name: Get Services Information
       run: |-
