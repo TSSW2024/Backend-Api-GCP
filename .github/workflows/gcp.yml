@@ -41,8 +41,8 @@ jobs:
       run: |
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
         sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" deploy.yaml
-        kubectl apply -f deploy.yaml
+        kubectl apply -f ./deploy/k8s/deploy.yaml
         sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" ingress.yaml
-        kubectl apply -f ingress.yaml
+        kubectl apply -f ./deploy/k8s/ingress.yaml
         sed -i "s/GOOGLE_PROJECT/$GOOGLE_PROJECT/g" services.yaml
-        kubectl apply -f services.yaml
+        kubectl apply -f ./deploy/k8s/services.yaml
