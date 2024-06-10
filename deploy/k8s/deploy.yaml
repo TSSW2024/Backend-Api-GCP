@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api-binance
-        image: gcr.io/tss-1s2024/backend-api:{GITHUB_SHA}
+        image: southamerica-east1-docker.pkg.dev/tss-1s2024/images/api-binance:latest
         ports:
         - containerPort: 8989
         resources:
