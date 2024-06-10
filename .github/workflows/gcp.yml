@@ -3,6 +3,9 @@ on:
   push:
     branches: [GCP]
 
+env:
+  IMAGE_TAG: ${{ github.sha }}
+
 jobs:
   build-push-gcr:
     name: Build and Push to GCP
@@ -47,6 +50,9 @@ jobs:
     - name: Get GKE Credentials
       run: |-
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
+
+    - name: Set Image Tag in Deployment YAML
+      run: sed -i "s~{IMAGE_TAG}~${{ env.IMAGE_TAG }}~" deploy/k8s/deploy.yaml
 
     - name: Apply Kubernetes Deploy YAML
       env:
