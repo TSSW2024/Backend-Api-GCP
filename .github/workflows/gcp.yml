@@ -34,7 +34,7 @@ jobs:
 
     - name: Push Docker Image to Artifact Registry
       run: |-
-        docker tag ${{ secrets.IMAGE_NAME }}:${{ github.sha }} ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+        docker tag ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
 
     - name: Install Google Cloud SDK
