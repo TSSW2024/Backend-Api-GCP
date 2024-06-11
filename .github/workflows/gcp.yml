@@ -52,7 +52,7 @@ jobs:
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
 
     - name: Set Image Tag in Deployment YAML
-      run: sed -i "s~{IMAGE_TAG}~${{ env.IMAGE_TAG }}~" deploy/k8s/deploy.yaml
+      run: sed -i "s~{IMAGE_TAG}~${{ github.sha }}~" deploy/k8s/deploy.yaml
 
     - name: Apply Kubernetes Deploy YAML
       run: kubectl apply -f ./deploy/k8s/deploy.yaml
