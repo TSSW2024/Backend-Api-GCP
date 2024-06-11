@@ -25,8 +25,7 @@ jobs:
         project_id: ${{ secrets.PROJECT_ID }}
 
     - name: Build Docker Image
-      run: docker build -t  ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }} .
-
+      run: docker build -t ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }} .
     - name: Configure Docker Client
       run: |-
         gcloud auth configure-docker --quiet
@@ -34,7 +33,7 @@ jobs:
 
     - name: Push Docker Image to Artifact Registry
       run: |-
-        docker tag  ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+        docker tag ${{ secrets.IMAGE_NAME }}:${{ github.sha }} ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
 
     - name: Install Google Cloud SDK
