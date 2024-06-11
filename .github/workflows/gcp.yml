@@ -4,9 +4,6 @@ on:
     branches: [GCP]
 
 env:
-  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-  RUTA: ${{ secrets.REGISTRY_URL }}
-  IMAGE_NAME: ${{ secrets.IMAGE_NAME }}
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:

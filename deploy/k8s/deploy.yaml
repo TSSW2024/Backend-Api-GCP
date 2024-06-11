@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: api-binance
-        image: ${{ env.RUTA }}/${{ env.PROJECT_ID }}/images/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+        image: {IMAGE_TAG}
         ports:
         - containerPort: 8989
         resources:
