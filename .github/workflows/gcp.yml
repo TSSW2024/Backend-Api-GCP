@@ -27,11 +27,6 @@ jobs:
     - name: Build Docker Image
       run: docker build -t ${{ secrets.IMAGE_NAME }}:${{ github.sha }} .
 
-    - name: Configure Docker Client
-      run: |-
-        gcloud auth configure-docker --quiet
-        gcloud auth configure-docker ${{ secrets.REGISTRY_URL }} --quiet
-
     - name: Push Docker Image to Artifact Registry
       run: |-
         docker tag ${{ secrets.IMAGE_NAME }}:${{ github.sha }} ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
@@ -52,11 +47,9 @@ jobs:
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
 
     - name: Set Image Tag in Deployment YAML
-      run: sed -i "s~{IMAGE_TAG}~${{ env.IMAGE_TAG }}~" deploy/k8s/deploy.yaml
+      run: sed -i "s~{IMAGE_TAG}~${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ env.IMAGE_TAG }}~" deploy/k8s/deploy.yaml
 
     - name: Apply Kubernetes Deploy YAML
-      env:
-        GITHUB_SHA: ${{ github.sha }}
       run: kubectl apply -f ./deploy/k8s/deploy.yaml
 
     - name: Apply Kubernetes Ingress YAML
@@ -64,7 +57,3 @@ jobs:
 
     - name: Apply Kubernetes Services YAML
       run: kubectl apply -f ./deploy/k8s/services.yaml
-
-    - name: Get Services Information
-      run: |-
-          kubectl get services -o wide -n ${{ secrets.NAMESPACE }}
