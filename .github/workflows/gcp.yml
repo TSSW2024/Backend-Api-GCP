@@ -31,7 +31,7 @@ jobs:
       run: |-
         gcloud auth configure-docker --quiet
         gcloud auth configure-docker ${{ secrets.REGISTRY_URL }} --quiet
-        
+
     - name: Push Docker Image to Artifact Registry
       run: |
           docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}
@@ -51,7 +51,7 @@ jobs:
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
 
     - name: Set Image Deployment YAML
-      run: sed -i "s~{IMAGE_TAG}~${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}~" deploy/k8s/deploy.yaml
+      run: sed -i "s~{IMAGE_TAG}~${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:latest~" deploy/k8s/deploy.yaml
       
 
     - name: Apply Kubernetes Deploy YAML
