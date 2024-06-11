@@ -30,12 +30,10 @@ jobs:
         export_default_credentials: true
 
     - name: build and push the docker image
-      env:
-        GOOGLE_PROJECT: ${{ secrets.PROJECT_ID }}
       run: |
         gcloud auth configure-docker ${{ secrets.REGISTRY_URL }} --quiet
-        docker build -t ${{ secrets.REGISTRY_URL }}/$GOOGLE_PROJECT/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
-        docker push ${{ secrets.REGISTRY_URL }}/$GOOGLE_PROJECT/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+        docker build -t ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
 
     - name: deploy to gke
       env:
