@@ -1,20 +1,18 @@
 name: Build and Push Go Image to Google Cloud Platform
-
 on:
   push:
-    branches:
-    - 'GCP'
+    branches: [GCP]
+
 env:
   IMAGE_TAG: ${{ github.sha }}
 
 jobs:
-  deploy:
+  build-push-gcr:
+    name: Build and Push to GCP
     runs-on: ubuntu-latest
     steps:
-
-    - name: code checkout
-      uses: actions/checkout@v2
-    
+    - name: Checkout
+      uses: actions/checkout@v4
 
     - name: Authenticate with gcloud CLI
       uses: google-github-actions/auth@v1
@@ -25,30 +23,42 @@ jobs:
       uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ secrets.PROJECT_ID }}
-        service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-        install_components: 'gke-gcloud-auth-plugin'
-        export_default_credentials: true
 
-    - name: build and push the docker image
-      run: |
+    - name: Build Docker Image
+      run: docker build -t ${{ secrets.IMAGE_NAME }}:${{ github.sha }} .
+
+    - name: Configure Docker Client
+      run: |-
+        gcloud auth configure-docker --quiet
         gcloud auth configure-docker ${{ secrets.REGISTRY_URL }} --quiet
-        docker build -t ${{ secrets.IMAGE_NAME }}:${{ github.sha }} .
+
+    - name: Push Docker Image to Artifact Registry
+      run: |-
+        docker tag ${{ secrets.IMAGE_NAME }}:${{ github.sha }} ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
         docker push ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ github.sha }}
 
-    - name: deploy to gke
-      env:
-        GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-      run: |
+    - name: Install Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v0.2.0
+      with:
+          version: 'latest'
+          project_id: ${{ secrets.PROJECT_ID }}
+          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+
+    - name: Install gke-gcloud-auth-plugin
+      run: gcloud components install gke-gcloud-auth-plugin
+      
+    - name: Get GKE Credentials
+      run: |-
         gcloud container clusters get-credentials ${{ secrets.GKE_CLUSTER }} --zone ${{ secrets.GKE_ZONE }} --project ${{ secrets.PROJECT_ID }}
 
     - name: Set Image Tag in Deployment YAML
-      run: sed -i "s~{IMAGE_TAG}~${{ env.IMAGE_TAG }}~" deploy/k8s/deploy.yaml
+      run: sed -i "s~{IMAGE_TAG}~${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }}:${{ env.IMAGE_TAG }}~" deploy/k8s/deploy.yaml
 
     - name: Apply Kubernetes Deploy YAML
       run: kubectl apply -f ./deploy/k8s/deploy.yaml
-    
+
     - name: Apply Kubernetes Ingress YAML
       run: kubectl apply -f ./deploy/k8s/ingress.yaml
-    
+
     - name: Apply Kubernetes Services YAML
       run: kubectl apply -f ./deploy/k8s/services.yaml
