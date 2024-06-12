@@ -17,17 +17,6 @@ spec:
         image: {IMAGE_TAG}
         ports:
         - containerPort: 8989
-    env:
-        - name: BINANCE_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: binance-secrets
-              key: BINANCE_API_KEY
-        - name: BINANCE_API_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: binance-secrets
-              key: BINANCE_API_SECRET
     resources:
           # You must specify requests for CPU to autoscale
           # based on CPU utilization
