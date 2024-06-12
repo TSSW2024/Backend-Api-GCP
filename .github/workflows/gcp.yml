@@ -5,6 +5,8 @@ on:
 
 env:
   IMAGE_TAG: ${{ github.sha }}
+  DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
+  NAMESPACE: ${{ secrets.NAMESPACE }}
 
 jobs:
   build-push-gcr:
