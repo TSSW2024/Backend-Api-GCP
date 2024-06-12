@@ -5,9 +5,7 @@ on:
 
 env:
   IMAGE_TAG: ${{ github.sha }}
-  DEPLOYMENT_NAME: ${{ secrets.DEPLOYMENT_NAME }}
-  NAMESPACE: ${{ secrets.NAMESPACE }}
-
+  
 jobs:
   build-push-gcr:
     name: Build and Push to GCP
@@ -28,6 +26,9 @@ jobs:
 
     - name: Build Docker Image
       run: docker build -t ${{ secrets.REGISTRY_URL }}/${{ secrets.PROJECT_ID }}/images/${{ secrets.IMAGE_NAME }} .
+      env:
+        BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
+        BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}
   
     - name: Configure Docker Client
       run: |-
