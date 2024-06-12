@@ -17,7 +17,7 @@ spec:
         image: {IMAGE_TAG}
         ports:
         - containerPort: 8989
-    resources:
+        resources:
           # You must specify requests for CPU to autoscale
           # based on CPU utilization
           limits:
