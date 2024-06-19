@@ -12,7 +12,6 @@ spec:
       labels:
         app: api-binance
     spec:
-      serviceAccountName: backendapi
       containers:
       - name: api-binance
         image: {IMAGE_TAG}
