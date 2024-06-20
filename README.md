@@ -29,3 +29,4 @@
 - solo tiene 2 librerias
   -go get github.com/adshao/go-binance/v2
   -go get github.com/joho/godotenv
+  
