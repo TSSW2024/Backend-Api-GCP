@@ -13,7 +13,7 @@ func Handlerfuns() {
 	//Obtenemos solo una moneda ejemplo http://localhost:8080/cryptoprice?symbol=BTCUSDT
 	http.HandleFunc("/cryptoprice", httprequestt.HandleSingleCryptoPrice)
 
-	puerto := ":8080"
+	puerto := ":3000"
 	log.Printf("Servidor en ejecución en http://localhost%s\n", puerto)
 	log.Fatal(http.ListenAndServe(puerto, nil))
 }
