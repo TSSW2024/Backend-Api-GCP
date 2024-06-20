@@ -9,7 +9,7 @@ metadata:
     acme.cert-manager.io/http01-edit-in-place: "true"
 spec: 
   rules:
-  - host: api-binance.tssw.cl
+  - host: api-binance-v2.tssw.cl
     http:
       paths:
       - backend:
@@ -21,5 +21,5 @@ spec:
         path: /
   tls:
   - hosts:
-    - api-binance.tssw.cl
+    - api-binance-v2.tssw.cl
     secretName: api-binance-ingress-v2-secret
