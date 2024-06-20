@@ -7,6 +7,6 @@ spec:
     app: api-binance-v2
   ports:
     - protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 9090
   type: ClusterIP
