@@ -1,10 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: api-binance-ingress
+  name: api-binance-ingress-v2
   namespace: default
   annotations:
     kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    acme.cert-manager.io/http01-edit-in-place: "true"
 spec: 
   rules:
   - host: api-binance.tssw.cl
@@ -20,4 +22,4 @@ spec:
   tls:
   - hosts:
     - api-binance.tssw.cl
-    secretName: api-binance-ingress-secret
+    secretName: api-binance-ingress-v2-secret
